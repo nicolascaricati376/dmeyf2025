@@ -125,6 +125,7 @@ def entrenar_modelo_final(X_train: pd.DataFrame,
     preds_prom = preds_acumuladas / len(semillas)
     logger.info(f"✅ Ensamble final completado con {len(semillas)} modelos.")
     
+    
     return preds_prom, modelos
 
 
