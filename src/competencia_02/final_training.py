@@ -705,7 +705,8 @@ def generar_predicciones_finales(
     n_modelos = 0
     preds_por_grupo = []
 
-    y_true = df_predict["target_to_calculate_gan"].values
+    df_predict = df_predict.set_index("numero_de_cliente")
+    y_true = df_predict.loc[clientes_predict, "target_to_calculate_gan"].values
 
     for nombre_grupo, modelos in modelos_por_grupo.items():
         logger.info(f"Procesando grupo: {nombre_grupo} con {len(modelos)} modelos")
