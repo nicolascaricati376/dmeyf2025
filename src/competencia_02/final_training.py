@@ -683,7 +683,6 @@ logger = logging.getLogger(__name__)
 #     }
 
 
-
 def generar_predicciones_finales(
     modelos_por_grupo: dict[str, list[lgb.Booster]],
     X_predict: pd.DataFrame,
@@ -739,7 +738,8 @@ def generar_predicciones_finales(
 
             predicciones_individuales.append(df_i)
 
-            ganancia_test = ganancia_evaluator(y_pred_proba, y_true)
+            # ✅ Usar calcular_ganancia_top_k en lugar de ganancia_evaluator
+            ganancia_test = calcular_ganancia_top_k(y_pred_proba, y_true, top_k)
             resultados_ganancias.append({
                 "mes": mes,
                 "grupo": nombre_grupo,
@@ -750,9 +750,8 @@ def generar_predicciones_finales(
         preds_grupo /= len(modelos)
         preds_por_grupo.append(preds_grupo)
 
-    # === Corrección: definir y_pred_global ===
+    # Ensamble global
     y_pred_global = preds_sum_global / n_modelos
-
     df_topk_global = pd.DataFrame({
         "numero_de_cliente": clientes_predict,
         "probabilidad": y_pred_global
@@ -769,6 +768,7 @@ def generar_predicciones_finales(
         "ganancia_test": float(ganancia_global)
     })
 
+    # Ensamble por grupos
     y_pred_grupos = sum(preds_por_grupo) / len(preds_por_grupo)
     df_topk_grupos = pd.DataFrame({
         "numero_de_cliente": clientes_predict,
@@ -798,5 +798,4 @@ def generar_predicciones_finales(
         "top_k_grupos": df_topk_grupos,
         "ganancias": df_ganancias
     }
-
 
