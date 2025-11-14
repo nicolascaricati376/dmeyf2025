@@ -229,7 +229,7 @@ def main():
     # )
 
   
-     === 06 Entrenar modelo final (distintos periodos) ===
+    # === 06 Entrenar modelo final (distintos periodos) ===
     
     # Entrenamiento en Abril
     logger.info("=== ENTRENAMIENTO FINAL ABRIL ===")
