@@ -102,8 +102,8 @@ def main():
         # 2. Feature Engineering
         # Excluyo meses problematicos
         # meses_excluir = [201904, 201905, 201910, 202006]
-        df_fe = df_fe[~df_fe["foto_mes"].isin(meses_excluir)].copy()
-        logger.info(f"Después de excluir meses problemáticos: {df_fe.shape}")
+        # df_fe = df_fe[~df_fe["foto_mes"].isin(meses_excluir)].copy()
+        # logger.info(f"Después de excluir meses problemáticos: {df_fe.shape}")
 
         # Imputacion para corregir 0s
         df_fe = imputar_ceros_por_mes_anterior(df_fe, columnas_no_imputar=['target','target_to_calculate_gan'])
