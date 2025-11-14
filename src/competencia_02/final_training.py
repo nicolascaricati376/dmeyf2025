@@ -740,8 +740,8 @@ def generar_predicciones_finales(
 
             predicciones_individuales.append(df_i)
 
-            # === Calcular ganancia con ganancia_evaluator ===
-            ganancia_test = ganancia_evaluator(y_pred_proba, y_true)
+            # === Calcular ganancia con calcular_ganancia_top_k ===
+            ganancia_test = calcular_ganancia_top_k(y_true,y_pred_proba)
             resultados_ganancias.append({
                 "mes": mes,
                 "grupo": nombre_grupo,
@@ -769,7 +769,7 @@ def generar_predicciones_finales(
     df_topk_global.to_csv(f"predict/predicciones_global_{mes}_{timestamp}.csv", index=False)
 
     # Ganancia global
-    ganancia_global = ganancia_evaluator(y_pred_global, y_true)
+    ganancia_global = calcular_ganancia_top_k(y_true,y_pred_global)
     resultados_ganancias.append({
         "mes": mes,
         "grupo": "GLOBAL",
@@ -788,7 +788,7 @@ def generar_predicciones_finales(
     df_topk_grupos.to_csv(f"predict/predicciones_grupos_{mes}_{timestamp}.csv", index=False)
 
     # Ganancia grupos
-    ganancia_grupos = ganancia_evaluator(y_pred_grupos, y_true)
+    ganancia_grupos = calcular_ganancia_top_k(y_true,y_pred_grupos)
     resultados_ganancias.append({
         "mes": mes,
         "grupo": "GRUPOS",
