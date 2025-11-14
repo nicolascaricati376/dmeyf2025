@@ -101,7 +101,7 @@ def main():
     
         # 2. Feature Engineering
         # Excluyo meses problematicos
-        meses_excluir = [201904, 201905, 201910, 202006]
+        # meses_excluir = [201904, 201905, 201910, 202006]
         df_fe = df_fe[~df_fe["foto_mes"].isin(meses_excluir)].copy()
         logger.info(f"Después de excluir meses problemáticos: {df_fe.shape}")
 
@@ -135,8 +135,8 @@ def main():
             and c not in columnas_a_excluir
         ]
         df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})
-        # for i in (1,2):
-        #     df_fe = feature_engineering_lag(df_fe, columnas=atributos, cant_lag=i)
+        for i in (1,2,3):
+             df_fe = feature_engineering_lag(df_fe, columnas=atributos, cant_lag=i)
 
         df_fe = generar_cambios_de_pendiente_multiples_fast(df_fe, columnas=columnas_para_fe_regresiones, ventana_corta=3, ventana_larga=6)
         df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})  
@@ -231,43 +231,43 @@ def main():
   
     # === 06 Entrenar modelo final (distintos periodos) ===
     
-    # # Entrenamiento en Abril
-    # logger.info("=== ENTRENAMIENTO FINAL ABRIL ===")
+    # Entrenamiento en Abril
+    logger.info("=== ENTRENAMIENTO FINAL ABRIL ===")
     
-    # # Preparar datos por grupo y semilla con undersampling
-    # grupos_datos_abril = preparar_datos_entrenamiento_por_grupos_por_semilla(
-    #     df_fe,
-    #     FINAL_TRAINING_GROUPS_APRIL,
-    #     FINAL_PREDIC_APRIL,
-    #     undersampling_ratio=UNDERSAMPLING_ENTRENAMIENTO_ENSAMBLE
-    #     # semillas=SEMILLA
-    # )
+    # Preparar datos por grupo y semilla con undersampling
+    grupos_datos_abril = preparar_datos_entrenamiento_por_grupos_por_semilla(
+        df_fe,
+        FINAL_TRAINING_GROUPS_APRIL,
+        FINAL_PREDIC_APRIL,
+        undersampling_ratio=UNDERSAMPLING_ENTRENAMIENTO_ENSAMBLE
+        # semillas=SEMILLA
+    )
     
-    # # Preparar datos de predicción
-    # df_predict_abril = df_fe[df_fe["foto_mes"] == FINAL_PREDIC_APRIL]
-    # X_predict_abril = df_predict_abril.drop(columns=["target", "target_to_calculate_gan"])
-    # clientes_predict_abril = df_predict_abril["numero_de_cliente"].values
+    # Preparar datos de predicción
+    df_predict_abril = df_fe[df_fe["foto_mes"] == FINAL_PREDIC_APRIL]
+    X_predict_abril = df_predict_abril.drop(columns=["target", "target_to_calculate_gan"])
+    clientes_predict_abril = df_predict_abril["numero_de_cliente"].values
     
-    # # Entrenar modelos por grupo y semilla
-    # modelos_por_grupo_abril = entrenar_modelos_por_grupo_y_semilla(grupos_datos_abril, mejores_params)
+    # Entrenar modelos por grupo y semilla
+    modelos_por_grupo_abril = entrenar_modelos_por_grupo_y_semilla(grupos_datos_abril, mejores_params)
     
-    # # Generar predicciones finales (ahora con mes)
-    # resultados_abril = generar_predicciones_finales(
-    #     modelos_por_grupo_abril,
-    #     X_predict_abril,
-    #     clientes_predict_abril,
-    #     df_predict_abril,
-    #     top_k=TOP_K,
-    #     mes=FINAL_PREDIC_APRIL
-    # )
+    # Generar predicciones finales (ahora con mes)
+    resultados_abril = generar_predicciones_finales(
+        modelos_por_grupo_abril,
+        X_predict_abril,
+        clientes_predict_abril,
+        df_predict_abril,
+        top_k=TOP_K,
+        mes=FINAL_PREDIC_APRIL
+    )
     
-    # # Guardar predicciones
-    # guardar_predicciones_finales({"top_k": resultados_abril["top_k_global"]}, f"{FINAL_PREDIC_APRIL}_global")
-    # guardar_predicciones_finales({"top_k": resultados_abril["top_k_grupos"]}, f"{FINAL_PREDIC_APRIL}_grupos")
+    # Guardar predicciones
+    guardar_predicciones_finales({"top_k": resultados_abril["top_k_global"]}, f"{FINAL_PREDIC_APRIL}_global")
+    guardar_predicciones_finales({"top_k": resultados_abril["top_k_grupos"]}, f"{FINAL_PREDIC_APRIL}_grupos")
     
-    # # Guardar ganancias
-    # resultados_abril["ganancias"].to_csv(f"predict/ganancias_{STUDY_NAME}_{FINAL_PREDIC_APRIL}.csv", index=False)
-    # logger.info(f"✅ CSV de ganancias guardado: predict/ganancias_{STUDY_NAME}_{FINAL_PREDIC_APRIL}.csv")
+    # Guardar ganancias
+    resultados_abril["ganancias"].to_csv(f"predict/ganancias_{STUDY_NAME}_{FINAL_PREDIC_APRIL}.csv", index=False)
+    logger.info(f"✅ CSV de ganancias guardado: predict/ganancias_{STUDY_NAME}_{FINAL_PREDIC_APRIL}.csv")
     
         
     
