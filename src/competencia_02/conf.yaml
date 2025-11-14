@@ -1,5 +1,5 @@
 #yaml
-STUDY_NAME: Resultados Abril y Junio - US 0.37 y 10 Semillas 14 11
+STUDY_NAME: Resultados Abril y Junio - US 0.37 y 10 Semillas 14 11 (Adding Lags 1-3 & Incluiding Funky Months to FE
 competencia01:
   BUCKET_NAME: ../../../buckets/b1/Compe_02
   COSTO_ESTIMULO: 20000
