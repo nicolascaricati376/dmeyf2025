@@ -132,4 +132,4 @@ def calcular_ganancia_top_k(y_true, y_pred_proba, k=10000):
     ganancia_total = tp * GANANCIA_ACIERTO - fp * COSTO_ESTIMULO
 
     logger.debug(f"Ganancia top_k={k}: TP={tp}, FP={fp}, Total={ganancia_total:,.0f}")
-    return 
+    return ganancia_total
