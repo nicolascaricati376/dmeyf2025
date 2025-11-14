@@ -705,8 +705,12 @@ def generar_predicciones_finales(
     n_modelos = 0
     preds_por_grupo = []
 
-    df_predict = df_predict.set_index("numero_de_cliente")
-    y_true = df_predict.loc[clientes_predict, "target_to_calculate_gan"].values
+    missing = set(clientes_predict) - set(df_predict.index)
+    if missing:
+        logger.warning(f"Clientes faltantes en df_predict: {len(missing)}")
+        
+    y_true = df_predict.loc[clientes_predict, "target_to_calculate_gan"].fillna(0).values
+
 
     for nombre_grupo, modelos in modelos_por_grupo.items():
         logger.info(f"Procesando grupo: {nombre_grupo} con {len(modelos)} modelos")
@@ -731,10 +735,9 @@ def generar_predicciones_finales(
 
             if "target_to_calculate_gan" in df_predict.columns:
                 df_i = df_i.merge(
-                    df_predict[["numero_de_cliente", "target_to_calculate_gan"]],
+                    df_predict.reset_index()[["numero_de_cliente", "target_to_calculate_gan"]],
                     on="numero_de_cliente",
-                    how="left"
-                )
+                    how="left")
                 df_i["ganancia"] = df_i["predict"] * df_i["target_to_calculate_gan"]
 
             predicciones_individuales.append(df_i)
