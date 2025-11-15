@@ -169,7 +169,7 @@ def main():
 
     # # 4. Ejecutar optimización (función simple)
     
-    # study = optimizar(df_fe, n_trials=50,study_name = STUDY_NAME ,undersampling = UNDERSAMPLING_OPTIMIZACION)
+    # study = optimizar(df_fe, n_trials=100,study_name = STUDY_NAME ,undersampling = UNDERSAMPLING_OPTIMIZACION)
   
     # # 5. Análisis adicional
     # logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -208,9 +208,13 @@ def main():
     # mejores_params = cargar_mejores_hiperparametros()
 
     # mejores_params = {'bagging_fraction': 0.648239786, 'feature_fraction': 0.338110921, 'lambda_l1': 3.152084178, 'lambda_l2': 2.623895465, 'learning_rate': 0.074681467, 'min_data_in_leaf': 10, 'num_boost_round': 496, 'num_leaves': 26} # Opti sin US
-    # mejores_params = {'num_leaves': 86, 'learning_rate': 0.04515219676722008, 'min_data_in_leaf': 45, 'feature_fraction': 0.2783670269042045, 'bagging_fraction': 0.68927175577007, 'lambda_l1': 1.4668038650423412, 'lambda_l2': 4.8010252173774495, 'num_boost_round': 507} # Opti con 0.2 de US
-    mejores_params = {'num_leaves': 71, 'learning_rate': 0.005943961863023024, 'min_data_in_leaf': 88, 'feature_fraction': 0.6094884732441374, 'bagging_fraction': 0.30532645375787404, 'lambda_l1': 0.1442564185202138, 'lambda_l2': 1.9492290528756926, 'num_boost_round': 497} # Opti con 0.5 de US
+    mejores_params = {'num_leaves': 86, 'learning_rate': 0.04515219676722008, 'min_data_in_leaf': 45, 'feature_fraction': 0.2783670269042045, 'bagging_fraction': 0.68927175577007, 'lambda_l1': 1.4668038650423412, 'lambda_l2': 4.8010252173774495, 'num_boost_round': 507} # Opti con 0.2 de US
+    # mejores_params = {'num_leaves': 71, 'learning_rate': 0.005943961863023024, 'min_data_in_leaf': 88, 'feature_fraction': 0.6094884732441374, 'bagging_fraction': 0.30532645375787404, 'lambda_l1': 0.1442564185202138, 'lambda_l2': 1.9492290528756926, 'num_boost_round': 497} # Opti con 0.5 de US
     # mejores_params =  {'num_leaves': 106, 'learning_rate': 0.05318395463346495, 'min_data_in_leaf': 4, 'feature_fraction': 0.49759556652323156, 'bagging_fraction': 0.7176155814161423, 'lambda_l1': 4.792320092280481, 'lambda_l2': 2.275425835398769, 'num_boost_round': 679} # Opti con 0.05 de US
+    
+    # Nueva Opti de 0.2
+    # mejores_params = {'num_leaves': 121, 'learning_rate': 0.08944748172892189, 'min_data_in_leaf': 47, 'feature_fraction': 0.5831901957235187, 'bagging_fraction': 0.9395824062687965, 'lambda_l1': 4.4131882397060185, 'lambda_l2': 2.385519727758512, 'num_boost_round': 818}
+    # mejores_params = {'num_leaves': 121, 'learning_rate': 0.08944748172892189, 'min_data_in_leaf': 47, 'feature_fraction': 0.5831901957235187, 'bagging_fraction': 0.9395824062687965, 'num_boost_round': 818}
     
 
 
@@ -271,39 +275,39 @@ def main():
     
         
     
-    # # Entrenamiento en Junio
-    # logger.info("=== ENTRENAMIENTO FINAL JUNIO ===")
+    # Entrenamiento en Junio
+    logger.info("=== ENTRENAMIENTO FINAL JUNIO ===")
     
-    # # Preparar datos por grupo y semilla con undersampling
-    # grupos_datos_junio = preparar_datos_entrenamiento_por_grupos_por_semilla(
-    #     df_fe,
-    #     FINAL_TRAINING_GROUPS_JUNE,
-    #     FINAL_PREDIC_JUNE,
-    #     undersampling_ratio=UNDERSAMPLING_ENTRENAMIENTO_ENSAMBLE,
-    #     semillas=SEMILLA
-    # )
+    # Preparar datos por grupo y semilla con undersampling
+    grupos_datos_junio = preparar_datos_entrenamiento_por_grupos_por_semilla(
+        df_fe,
+        FINAL_TRAINING_GROUPS_JUNE,
+        FINAL_PREDIC_JUNE,
+        undersampling_ratio=UNDERSAMPLING_ENTRENAMIENTO_ENSAMBLE,
+        semillas=SEMILLA
+    )
     
-    # # Preparar datos de predicción
-    # df_predict_junio = df_fe[df_fe["foto_mes"] == FINAL_PREDIC_JUNE]
-    # X_predict_junio = df_predict_junio.drop(columns=["target", "target_to_calculate_gan"])
-    # clientes_predict_junio = df_predict_junio["numero_de_cliente"].values
+    # Preparar datos de predicción
+    df_predict_junio = df_fe[df_fe["foto_mes"] == FINAL_PREDIC_JUNE]
+    X_predict_junio = df_predict_junio.drop(columns=["target", "target_to_calculate_gan"])
+    clientes_predict_junio = df_predict_junio["numero_de_cliente"].values
     
-    # # Entrenar modelos por grupo y semilla
-    # modelos_por_grupo_junio = entrenar_modelos_por_grupo_y_semilla(grupos_datos_junio, mejores_params)
+    # Entrenar modelos por grupo y semilla
+    modelos_por_grupo_junio = entrenar_modelos_por_grupo_y_semilla(grupos_datos_junio, mejores_params)
     
-    # # Generar predicciones finales (ahora con mes)
-    # resultados_junio = generar_predicciones_finales(
-    #     modelos_por_grupo_junio,
-    #     X_predict_junio,
-    #     clientes_predict_junio,
-    #     df_predict_junio,
-    #     top_k=TOP_K,
-    #     mes=FINAL_PREDIC_JUNE
-    # )
+    # Generar predicciones finales (ahora con mes)
+    resultados_junio = generar_predicciones_finales(
+        modelos_por_grupo_junio,
+        X_predict_junio,
+        clientes_predict_junio,
+        df_predict_junio,
+        top_k=TOP_K,
+        mes=FINAL_PREDIC_JUNE
+    )
     
-    # # Guardar predicciones
-    # guardar_predicciones_finales({"top_k": resultados_junio["top_k_global"]}, f"{FINAL_PREDIC_JUNE}_global")
-    # guardar_predicciones_finales({"top_k": resultados_junio["top_k_grupos"]}, f"{FINAL_PREDIC_JUNE}_grupos")
+    # Guardar predicciones
+    guardar_predicciones_finales({"top_k": resultados_junio["top_k_global"]}, f"{FINAL_PREDIC_JUNE}_global")
+    guardar_predicciones_finales({"top_k": resultados_junio["top_k_grupos"]}, f"{FINAL_PREDIC_JUNE}_grupos")
     
     # Guardar ganancias
     resultados_junio["ganancias"].to_csv(f"predict/ganancias_{STUDY_NAME}_{FINAL_PREDIC_JUNE}.csv", index=False)
