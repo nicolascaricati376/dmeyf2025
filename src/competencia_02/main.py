@@ -154,7 +154,8 @@ def main():
         
         for i in (1,2,3):
              df_fe = feature_engineering_lag(df_fe, columnas=columnas_para_fe_deltas, cant_lag=i)
-
+        
+        df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})  
         
         logger.info(f"Feature Engineering completado: {df_fe.shape}")
         
