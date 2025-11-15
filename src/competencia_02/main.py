@@ -101,12 +101,12 @@ def main():
     
         # 2. Feature Engineering
         # Excluyo meses problematicos
-        meses_excluir = [202006]
+        meses_excluir = [201904, 201905, 201910, 202006]
         df_fe = df_fe[~df_fe["foto_mes"].isin(meses_excluir)].copy()
         logger.info(f"Después de excluir meses problemáticos: {df_fe.shape}")
 
-        # Imputacion para corregir 0s
-        df_fe = imputar_ceros_por_mes_anterior(df_fe, columnas_no_imputar=['target','target_to_calculate_gan'])
+        # # Imputacion para corregir 0s
+        # df_fe = imputar_ceros_por_mes_anterior(df_fe, columnas_no_imputar=['target','target_to_calculate_gan'])
 
         # Excluyo Comisiones Otras 
         df_fe = df_fe.drop(columns=['ccomisiones_otras','internet'])
@@ -134,6 +134,9 @@ def main():
             if c.startswith(('c', 'Visa_c', 'Master_c','Master_s','Visa_s','TC_Total_c','TC_Total_s','t','Visa_F', 'Visa_f','Master_F', 'Master_f')) 
             and c not in columnas_a_excluir
         ]
+        df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})
+        # for i in (1,2):
+        #     df_fe = feature_engineering_lag(df_fe, columnas=atributos, cant_lag=i)
 
         df_fe = generar_cambios_de_pendiente_multiples_fast(df_fe, columnas=columnas_para_fe_regresiones, ventana_corta=3, ventana_larga=6)
         df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})  
@@ -149,13 +152,9 @@ def main():
         for i in (4,8):
             # df_fe = feature_engineering_delta_max(df_fe, columnas=columnas_para_fe_deltas, ventana=i)
             df_fe = feature_engineering_delta_mean(df_fe, columnas=columnas_para_fe_deltas, ventana=i)
+        
+        df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})  
 
-        df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})  
-        
-        for i in (1,2):
-             df_fe = feature_engineering_lag(df_fe, columnas=columnas_para_fe_deltas, cant_lag=i)
-        
-        df_fe = df_fe.astype({col: "float32" for col in df_fe.select_dtypes("float").columns})  
         
         logger.info(f"Feature Engineering completado: {df_fe.shape}")
         
@@ -209,8 +208,8 @@ def main():
     # mejores_params = cargar_mejores_hiperparametros()
 
     # mejores_params = {'bagging_fraction': 0.648239786, 'feature_fraction': 0.338110921, 'lambda_l1': 3.152084178, 'lambda_l2': 2.623895465, 'learning_rate': 0.074681467, 'min_data_in_leaf': 10, 'num_boost_round': 496, 'num_leaves': 26} # Opti sin US
-    mejores_params = {'num_leaves': 86, 'learning_rate': 0.04515219676722008, 'min_data_in_leaf': 45, 'feature_fraction': 0.2783670269042045, 'bagging_fraction': 0.68927175577007, 'lambda_l1': 1.4668038650423412, 'lambda_l2': 4.8010252173774495, 'num_boost_round': 507} # Opti con 0.2 de US
-    # mejores_params = {'num_leaves': 71, 'learning_rate': 0.005943961863023024, 'min_data_in_leaf': 88, 'feature_fraction': 0.6094884732441374, 'bagging_fraction': 0.30532645375787404, 'lambda_l1': 0.1442564185202138, 'lambda_l2': 1.9492290528756926, 'num_boost_round': 497} # Opti con 0.5 de US
+    # mejores_params = {'num_leaves': 86, 'learning_rate': 0.04515219676722008, 'min_data_in_leaf': 45, 'feature_fraction': 0.2783670269042045, 'bagging_fraction': 0.68927175577007, 'lambda_l1': 1.4668038650423412, 'lambda_l2': 4.8010252173774495, 'num_boost_round': 507} # Opti con 0.2 de US
+    mejores_params = {'num_leaves': 71, 'learning_rate': 0.005943961863023024, 'min_data_in_leaf': 88, 'feature_fraction': 0.6094884732441374, 'bagging_fraction': 0.30532645375787404, 'lambda_l1': 0.1442564185202138, 'lambda_l2': 1.9492290528756926, 'num_boost_round': 497} # Opti con 0.5 de US
     # mejores_params =  {'num_leaves': 106, 'learning_rate': 0.05318395463346495, 'min_data_in_leaf': 4, 'feature_fraction': 0.49759556652323156, 'bagging_fraction': 0.7176155814161423, 'lambda_l1': 4.792320092280481, 'lambda_l2': 2.275425835398769, 'num_boost_round': 679} # Opti con 0.05 de US
     
 
@@ -272,39 +271,39 @@ def main():
     
         
     
-    # Entrenamiento en Junio
-    logger.info("=== ENTRENAMIENTO FINAL JUNIO ===")
+    # # Entrenamiento en Junio
+    # logger.info("=== ENTRENAMIENTO FINAL JUNIO ===")
     
-    # Preparar datos por grupo y semilla con undersampling
-    grupos_datos_junio = preparar_datos_entrenamiento_por_grupos_por_semilla(
-        df_fe,
-        FINAL_TRAINING_GROUPS_JUNE,
-        FINAL_PREDIC_JUNE,
-        undersampling_ratio=UNDERSAMPLING_ENTRENAMIENTO_ENSAMBLE,
-        semillas=SEMILLA
-    )
+    # # Preparar datos por grupo y semilla con undersampling
+    # grupos_datos_junio = preparar_datos_entrenamiento_por_grupos_por_semilla(
+    #     df_fe,
+    #     FINAL_TRAINING_GROUPS_JUNE,
+    #     FINAL_PREDIC_JUNE,
+    #     undersampling_ratio=UNDERSAMPLING_ENTRENAMIENTO_ENSAMBLE,
+    #     semillas=SEMILLA
+    # )
     
-    # Preparar datos de predicción
-    df_predict_junio = df_fe[df_fe["foto_mes"] == FINAL_PREDIC_JUNE]
-    X_predict_junio = df_predict_junio.drop(columns=["target", "target_to_calculate_gan"])
-    clientes_predict_junio = df_predict_junio["numero_de_cliente"].values
+    # # Preparar datos de predicción
+    # df_predict_junio = df_fe[df_fe["foto_mes"] == FINAL_PREDIC_JUNE]
+    # X_predict_junio = df_predict_junio.drop(columns=["target", "target_to_calculate_gan"])
+    # clientes_predict_junio = df_predict_junio["numero_de_cliente"].values
     
-    # Entrenar modelos por grupo y semilla
-    modelos_por_grupo_junio = entrenar_modelos_por_grupo_y_semilla(grupos_datos_junio, mejores_params)
+    # # Entrenar modelos por grupo y semilla
+    # modelos_por_grupo_junio = entrenar_modelos_por_grupo_y_semilla(grupos_datos_junio, mejores_params)
     
-    # Generar predicciones finales (ahora con mes)
-    resultados_junio = generar_predicciones_finales(
-        modelos_por_grupo_junio,
-        X_predict_junio,
-        clientes_predict_junio,
-        df_predict_junio,
-        top_k=TOP_K,
-        mes=FINAL_PREDIC_JUNE
-    )
+    # # Generar predicciones finales (ahora con mes)
+    # resultados_junio = generar_predicciones_finales(
+    #     modelos_por_grupo_junio,
+    #     X_predict_junio,
+    #     clientes_predict_junio,
+    #     df_predict_junio,
+    #     top_k=TOP_K,
+    #     mes=FINAL_PREDIC_JUNE
+    # )
     
-    # Guardar predicciones
-    guardar_predicciones_finales({"top_k": resultados_junio["top_k_global"]}, f"{FINAL_PREDIC_JUNE}_global")
-    guardar_predicciones_finales({"top_k": resultados_junio["top_k_grupos"]}, f"{FINAL_PREDIC_JUNE}_grupos")
+    # # Guardar predicciones
+    # guardar_predicciones_finales({"top_k": resultados_junio["top_k_global"]}, f"{FINAL_PREDIC_JUNE}_global")
+    # guardar_predicciones_finales({"top_k": resultados_junio["top_k_grupos"]}, f"{FINAL_PREDIC_JUNE}_grupos")
     
     # Guardar ganancias
     resultados_junio["ganancias"].to_csv(f"predict/ganancias_{STUDY_NAME}_{FINAL_PREDIC_JUNE}.csv", index=False)
