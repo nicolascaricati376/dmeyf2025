@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 from config import *
 from gain_function import calcular_ganancia, ganancia_lgb_binary, ganancia_evaluator, calcular_ganancia_top_k
-
+from final_training import *
 
 logging.basicConfig(
     level=logging.INFO,  # para ver mensajes DEBUG o superiores
