@@ -505,6 +505,20 @@ def objetivo_ganancia_por_meses(trial, df, undersampling=0.2) -> float:
     Devuelve la ganancia promedio de ambos meses.
     """
 
+        # Rango por defecto de hiperparámetros
+    DEFAULT_HYPERPARAMS = {
+        "num_leaves":      {"min": 5, "max": 50, "type": "int"},
+        "learning_rate":   {"min": 0.005, "max": 0.10, "type": "float"},
+        "min_data_in_leaf":{"min": 300, "max": 800, "type": "int"},
+        "feature_fraction":{"min": 0.1, "max": 0.8, "type": "float"},
+        "bagging_fraction":{"min": 0.2, "max": 0.8, "type": "float"},
+    }
+
+
+
+    # Merge entre YAML y defaults
+    PARAM_RANGES = {**DEFAULT_HYPERPARAMS, **HYPERPARAM_RANGES}
+
     # --- Sugerir hiperparámetros ---
     params_base = {
         'objective': 'binary',
