@@ -207,7 +207,7 @@ def main():
 
     # mejores_params = cargar_mejores_hiperparametros()
 
-    mejores_params = {'bagging_fraction': 0.648239786, 'feature_fraction': 0.338110921, 'lambda_l1': 3.152084178, 'lambda_l2': 2.623895465, 'learning_rate': 0.074681467, 'min_data_in_leaf': 10, 'num_boost_round': 496, 'num_leaves': 26} # Opti sin US
+    # mejores_params = {'bagging_fraction': 0.648239786, 'feature_fraction': 0.338110921, 'lambda_l1': 3.152084178, 'lambda_l2': 2.623895465, 'learning_rate': 0.074681467, 'min_data_in_leaf': 10, 'num_boost_round': 496, 'num_leaves': 26} # Opti sin US
     # mejores_params = {'num_leaves': 86, 'learning_rate': 0.04515219676722008, 'min_data_in_leaf': 45, 'feature_fraction': 0.2783670269042045, 'bagging_fraction': 0.68927175577007, 'lambda_l1': 1.4668038650423412, 'lambda_l2': 4.8010252173774495, 'num_boost_round': 507} # Opti con 0.2 de US
     # mejores_params = {'num_leaves': 71, 'learning_rate': 0.005943961863023024, 'min_data_in_leaf': 88, 'feature_fraction': 0.6094884732441374, 'bagging_fraction': 0.30532645375787404, 'lambda_l1': 0.1442564185202138, 'lambda_l2': 1.9492290528756926, 'num_boost_round': 497} # Opti con 0.5 de US
     # mejores_params =  {'num_leaves': 106, 'learning_rate': 0.05318395463346495, 'min_data_in_leaf': 4, 'feature_fraction': 0.49759556652323156, 'bagging_fraction': 0.7176155814161423, 'lambda_l1': 4.792320092280481, 'lambda_l2': 2.275425835398769, 'num_boost_round': 679} # Opti con 0.05 de US
@@ -217,18 +217,18 @@ def main():
     # mejores_params = {'num_leaves': 121, 'learning_rate': 0.08944748172892189, 'min_data_in_leaf': 47, 'feature_fraction': 0.5831901957235187, 'bagging_fraction': 0.9395824062687965, 'num_boost_round': 818}
 
 
-    # mejores_params = {'bagging_fraction': 0.288604819, 'feature_fraction': 0.727451551, 'lambda_l1': 1.573915301, 'lambda_l2': 3.131842205, 'learning_rate': 0.036350067, 'min_data_in_leaf': 13, 'num_boost_round': 779, 'num_leaves': 115} # Opti Nueva
+    mejores_params = {'bagging_fraction': 0.288604819, 'feature_fraction': 0.727451551, 'lambda_l1': 1.573915301, 'lambda_l2': 3.131842205, 'learning_rate': 0.036350067, 'min_data_in_leaf': 13, 'num_boost_round': 779, 'num_leaves': 115} # Opti Nueva
     
 
 
-    # logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
+    # # logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
 
     # df_fe_under = undersample_clientes(df_fe, UNDERSAMPLING, 555557)
     # df_fe_under = df_fe_under.select_dtypes(include=["number", "bool"]).copy()
     
     # # Evaluación multimes
     # evaluar_meses_test(
-    #     df_fe=df_fe,
+    #     df_fe=df_fe_under,
     #     mejores_params=mejores_params,
     #     semillas=SEMILLA,
     #     study_name=STUDY_NAME,
